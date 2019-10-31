@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta name="viewport" content="width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    </head>
+    <body style="margin:0;">
+        <div id='container' ></div>
+        
+        <!--<h2 id='hello'>Hello World!</h2>-->
+
+        <script src="./lib/three.min.js"></script>
+        <script src="./lib/TrackballControls.js"></script>
+        <script src="./lib/CSS3DRenderer.js"></script>
+
+        <script>
+            var SCREEN_WIDTH=640
+            //var SCREEN_HEIGHT=1136
+            var SCREEN_HEIGHT=960
+
+            renderer = new THREE.CSS3DRenderer()
+            renderer.setSize(SCREEN_WIDTH,SCREEN_HEIGHT)
+            document.getElementById("container").appendChild(renderer.domElement)
+
+            var camera = new THREE.PerspectiveCamera(45,SCREEN_WIDTH/SCREEN_HEIGHT,1,10000)
+
+
+            function CSS3DPlane(x, y) {
+                var plane = document.createElement('img');
+                plane.style.height = x;
+                plane.style.width = y;
+                plane.src = "./texture/wall.bmp";
+                return new THREE.CSS3DObject(plane);
+            }
+
+            function CSS3DCube(x, y, z) {
+                //前後
+                var plane1 = CSS3DPlane(x, y);
+                plane1.position.z += (z/2);
+                var plane2 = CSS3DPlane(x, y);
+                plane2.position.z -= (z/2);
+
+                //左右
+                var plane3 = CSS3DPlane(x, y);
+                plane3.position.x += (z/2);
+                plane3.rotation.y = Math.PI/-2;
+                var plane4 = CSS3DPlane(x, y);
+                plane4.position.x -= (z/2);
+                plane4.rotation.y = Math.PI/-2;
+
+                //上下
+                var plane5 = CSS3DPlane(x, y);
+                plane5.position.y += (z/2);
+                plane5.rotation.x = Math.PI/-2;
+                var plane6 = CSS3DPlane(x, y);
+                plane6.position.y -= (z/2);
+                plane6.rotation.x = Math.PI/-2;
+                /*
+                scene.add(plane1);
+                scene.add(plane2);
+                scene.add(plane3);
+                scene.add(plane4);
+                scene.add(plane5);
+                scene.add(plane6);
+                */
+                return [plane1, plane2, plane3, plane4, plane5, plane6];
+            }
+
+
+            //var hello = CSS3DPlane(64, 64);
+            var cube = CSS3DCube(64, 64, 64);
+
+            var scene = new THREE.Scene()
+            scene.add(camera)
+
+
+            for (var i=0;i<cube.length;i++) {
+                scene.add(cube[i]);
+            }
+
+            var plane = document.createElement('img');
+                plane.style.height = 10;
+                plane.style.width = 10;
+                plane.src = "./test.bmp";
+
+            var object = new THREE.CSS3DSprite(plane);
+            //scene.add(object)
+
+            camera.position.z=200
+            controls=new THREE.TrackballControls(camera,renderer.domElement)
+
+            function render(){
+                requestAnimationFrame(render)
+                renderer.render(scene,camera)
+                controls.update()
+            }
+
+            render()
+
+            
+        </script>
+    </body>
+</html>

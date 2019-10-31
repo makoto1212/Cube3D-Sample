@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta name="viewport" content="width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    </head>
+    <body style="margin:0px;">
+    <script src="./lib/three.min.js"></script>
+    <script src="./lib/TrackballControls.js"></script>
+    <script>
+        var SCREEN_WIDTH=640;
+        //var SCREEN_HEIGHT=1136
+        var SCREEN_HEIGHT=960;
+
+        //レンダラ
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+        document.body.appendChild(renderer.domElement);
+         
+        //シーン
+        var scene = new THREE.Scene();
+         
+        //オブジェクト
+        var geometry = new THREE.CubeGeometry(100, 100, 100);
+        var material = new THREE.MeshBasicMaterial({map:THREE.ImageUtils.loadTexture('./texture/wall.bmp')});
+        var mesh = new THREE.Mesh(geometry, material);
+        /*
+        mesh.rotation.x = 15 / 180 * Math.PI;
+        mesh.rotation.y = 30 / 180 * Math.PI;
+        mesh.rotation.z = 15 / 180 * Math.PI;
+        */
+        scene.add(mesh);
+         
+        //カメラ
+        var camera = new THREE.PerspectiveCamera(35, SCREEN_WIDTH/SCREEN_HEIGHT);
+        camera.position = new THREE.Vector3(0, 0, -500);
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+        controls=new THREE.TrackballControls(camera,renderer.domElement)
+
+        function render(){
+            requestAnimationFrame(render)
+            renderer.render(scene,camera)
+            controls.update()
+        }
+
+        render()
+
+         
+        //renderer.render(scene, camera);
+    </script>
+        <div id='container' ></div>
+    </body>
+</html>
